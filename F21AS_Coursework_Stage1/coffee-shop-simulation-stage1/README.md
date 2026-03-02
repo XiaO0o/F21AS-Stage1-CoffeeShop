@@ -1,6 +1,6 @@
 # Coffee Shop Simulation Stage 1
 
-Java 25 Maven project for Coffee Shop Simulation Stage 1.
+Java 17+ Maven project for Coffee Shop Simulation Stage 1.
 
 ## Prerequisites
 
@@ -43,10 +43,11 @@ Total sales: 44.04
 
 1. Enter `Customer ID` and click `New Order`.
 2. Select one or more items from the left list.
-3. Set `Quantity` and `Has Own Cup`, then click `Add Selected Items`.
-4. Click `Show Bill` to view line subtotals, subtotal, RuleA, RuleB, and total.
-5. Click `Complete Order` to save the order and update statistics.
-6. Click `Exit & Generate Report` to write `data/report.txt` and close the app.
+3. Set `Quantity` and click `Add Selected Items`.
+4. `Bill Details` updates automatically after each add (line subtotals, subtotal, RuleA, RuleB, total).
+5. `Has Own Cup` is only available for `DRINK` items. When `FOOD` or `SNACK` is selected, it is disabled.
+6. Click `Complete Order` to save the order and update statistics.
+7. Click `Exit` to write `data/report.txt` and close the app.
 
 ## Report output
 
