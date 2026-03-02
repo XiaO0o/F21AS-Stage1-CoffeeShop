@@ -1,0 +1,32 @@
+Item Report
+===========
+
+Category: DRINK
+  DRINK-001 | Americano | 2.50 | DRINK | count=3
+  DRINK-002 | Latte | 3.80 | DRINK | count=3
+  DRINK-003 | Cappuccino | 3.40 | DRINK | count=2
+
+Category: FOOD
+  FOOD-001 | Croissant | 3.20 | FOOD | count=1
+  FOOD-002 | Sandwich | 6.50 | FOOD | count=3
+  FOOD-003 | Pasta | 8.00 | FOOD | count=2
+
+Category: SNACK
+  SNACK-001 | Chips | 1.50 | SNACK | count=3
+  SNACK-002 | Cookie | 1.80 | SNACK | count=3
+
+Best-selling Items (Top 5 with ties)
+  1) DRINK-001 | Americano | count=3
+  1) DRINK-002 | Latte | count=3
+  1) FOOD-002 | Sandwich | count=3
+  1) SNACK-001 | Chips | count=3
+  1) SNACK-002 | Cookie | count=3
+
+
+Sales Report
+============
+Total orders: 5
+Total sales: 64.02
+Sales by date:
+  2026-02-01 -> 43.14
+  2026-03-02 -> 20.88

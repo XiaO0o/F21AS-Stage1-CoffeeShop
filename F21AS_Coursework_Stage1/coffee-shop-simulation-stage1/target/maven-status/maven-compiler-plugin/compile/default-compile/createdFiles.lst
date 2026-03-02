@@ -1,0 +1,15 @@
+coffeeshop\ui\CoffeeShopFrame$MenuItemListCellRenderer.class
+coffeeshop\model\OrderStatistics.class
+coffeeshop\io\CsvLoader.class
+coffeeshop\app\CoffeeShopApp.class
+coffeeshop\ui\CoffeeShopFrame$CartLine.class
+coffeeshop\model\Category.class
+coffeeshop\model\Order.class
+coffeeshop\ui\CoffeeShopFrame$1.class
+coffeeshop\io\CsvFileReader.class
+coffeeshop\model\InvalidMenuItemDataException.class
+coffeeshop\model\Menu.class
+coffeeshop\model\ReportGenerator.class
+coffeeshop\ui\CoffeeShopFrame.class
+coffeeshop\model\OrderLine.class
+coffeeshop\model\MenuItem.class

@@ -1,0 +1,12 @@
+D:\F21AS\F21AS_Coursework_Stage1\coffee-shop-simulation-stage1\src\main\java\coffeeshop\app\CoffeeShopApp.java
+D:\F21AS\F21AS_Coursework_Stage1\coffee-shop-simulation-stage1\src\main\java\coffeeshop\io\CsvFileReader.java
+D:\F21AS\F21AS_Coursework_Stage1\coffee-shop-simulation-stage1\src\main\java\coffeeshop\io\CsvLoader.java
+D:\F21AS\F21AS_Coursework_Stage1\coffee-shop-simulation-stage1\src\main\java\coffeeshop\model\Category.java
+D:\F21AS\F21AS_Coursework_Stage1\coffee-shop-simulation-stage1\src\main\java\coffeeshop\model\InvalidMenuItemDataException.java
+D:\F21AS\F21AS_Coursework_Stage1\coffee-shop-simulation-stage1\src\main\java\coffeeshop\model\Menu.java
+D:\F21AS\F21AS_Coursework_Stage1\coffee-shop-simulation-stage1\src\main\java\coffeeshop\model\MenuItem.java
+D:\F21AS\F21AS_Coursework_Stage1\coffee-shop-simulation-stage1\src\main\java\coffeeshop\model\Order.java
+D:\F21AS\F21AS_Coursework_Stage1\coffee-shop-simulation-stage1\src\main\java\coffeeshop\model\OrderLine.java
+D:\F21AS\F21AS_Coursework_Stage1\coffee-shop-simulation-stage1\src\main\java\coffeeshop\model\OrderStatistics.java
+D:\F21AS\F21AS_Coursework_Stage1\coffee-shop-simulation-stage1\src\main\java\coffeeshop\model\ReportGenerator.java
+D:\F21AS\F21AS_Coursework_Stage1\coffee-shop-simulation-stage1\src\main\java\coffeeshop\ui\CoffeeShopFrame.java
