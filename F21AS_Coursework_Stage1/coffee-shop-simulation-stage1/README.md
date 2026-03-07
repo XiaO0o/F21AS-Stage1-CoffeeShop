@@ -28,7 +28,19 @@ For a new device (or after cleaning `target/`), run compile first:
 mvn -DskipTests compile exec:java
 ```
 
+Compiled runnable JAR location: `target/coffee-shop-simulation-stage1-1.0-SNAPSHOT.jar`.
+
 The app reads `data/menu.csv` and `data/orders.csv` by default.
+Path resolution behavior:
+- First try current working directory.
+- If not found, fallback to the application/JAR location.
+
+You can also run the packaged JAR directly:
+
+```bash
+mvn -DskipTests package
+java -jar target/coffee-shop-simulation-stage1-1.0-SNAPSHOT.jar
+```
 
 Example startup output:
 
@@ -36,7 +48,7 @@ Example startup output:
 CoffeeShopApp started
 Loaded menu item count: 8
 Loaded order count: 4
-Total sales: 44.04
+Total sales: 43.14
 ```
 
 ## GUI workflow
@@ -51,7 +63,7 @@ Total sales: 44.04
 
 ## Report output
 
-- Generated file: `data/report.txt`
+- Generated file: `data/report.txt` (same directory as the resolved menu CSV)
 - Contains:
   - item list and item counts
   - best-selling ranking
