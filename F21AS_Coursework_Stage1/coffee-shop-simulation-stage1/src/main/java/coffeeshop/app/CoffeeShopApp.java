@@ -27,7 +27,7 @@ public class CoffeeShopApp {
     public static void main(String[] args) {
         Path menuCsvPath = resolveMenuCsvPath(args);
         Path ordersCsvPath = resolveOrdersCsvPath(args);
-        Path reportPath = Paths.get(DEFAULT_REPORT_PATH);
+        Path reportPath = resolveReportPath(menuCsvPath);
 
         Menu menu = CsvLoader.loadMenu(menuCsvPath);
         TreeMap<LocalDateTime, Order> allOrders = CsvLoader.loadOrders(ordersCsvPath, menu);
@@ -52,7 +52,7 @@ public class CoffeeShopApp {
         System.out.println(String.format(Locale.ROOT, "Total sales: %.2f", totalSales));
         if (GraphicsEnvironment.isHeadless()) {
             generateAndWriteReport(allOrders, stats, reportPath);
-            System.out.println("Report written to: " + DEFAULT_REPORT_PATH);
+            System.out.println("Report written to: " + reportPath.toAbsolutePath().normalize());
             return;
         }
 
@@ -64,17 +64,84 @@ public class CoffeeShopApp {
     }
 
     private static Path resolveMenuCsvPath(String[] args) {
-        if (args != null && args.length > 0 && args[0] != null && !args[0].isBlank()) {
-            return Paths.get(args[0]);
-        }
-        return Paths.get(DEFAULT_MENU_PATH);
+        return resolveInputOrDefaultPath(args, 0, DEFAULT_MENU_PATH);
     }
 
     private static Path resolveOrdersCsvPath(String[] args) {
-        if (args != null && args.length > 1 && args[1] != null && !args[1].isBlank()) {
-            return Paths.get(args[1]);
+        return resolveInputOrDefaultPath(args, 1, DEFAULT_ORDERS_PATH);
+    }
+
+    private static Path resolveInputOrDefaultPath(String[] args, int argIndex, String defaultRelativePath) {
+        if (args != null && args.length > argIndex && args[argIndex] != null && !args[argIndex].isBlank()) {
+            return Paths.get(args[argIndex]);
         }
-        return Paths.get(DEFAULT_ORDERS_PATH);
+
+        Path cwdCandidate = Paths.get(defaultRelativePath);
+        if (Files.exists(cwdCandidate)) {
+            return cwdCandidate;
+        }
+
+        Path appCandidate = resolveDefaultPathNearApplication(defaultRelativePath);
+        if (appCandidate != null && Files.exists(appCandidate)) {
+            return appCandidate;
+        }
+
+        return cwdCandidate;
+    }
+
+    private static Path resolveDefaultPathNearApplication(String defaultRelativePath) {
+        try {
+            Path codeSourcePath =
+                    Paths.get(
+                                    CoffeeShopApp.class
+                                            .getProtectionDomain()
+                                            .getCodeSource()
+                                            .getLocation()
+                                            .toURI())
+                            .toAbsolutePath()
+                            .normalize();
+
+            Path baseDir = Files.isRegularFile(codeSourcePath) ? codeSourcePath.getParent() : codeSourcePath;
+            if (baseDir == null) {
+                return null;
+            }
+
+            Path besideAppCandidate = baseDir.resolve(defaultRelativePath).normalize();
+            if (Files.exists(besideAppCandidate)) {
+                return besideAppCandidate;
+            }
+
+            Path projectLikeDir = baseDir;
+            Path fileName = projectLikeDir.getFileName();
+            if (fileName != null && "classes".equalsIgnoreCase(fileName.toString())) {
+                Path parent = projectLikeDir.getParent();
+                if (parent != null) {
+                    projectLikeDir = parent;
+                }
+            }
+
+            fileName = projectLikeDir.getFileName();
+            if (fileName != null && "target".equalsIgnoreCase(fileName.toString())) {
+                Path parent = projectLikeDir.getParent();
+                if (parent != null) {
+                    projectLikeDir = parent;
+                }
+            }
+
+            return projectLikeDir.resolve(defaultRelativePath).normalize();
+        } catch (Exception exception) {
+            return null;
+        }
+    }
+
+    private static Path resolveReportPath(Path menuCsvPath) {
+        if (menuCsvPath != null) {
+            Path menuParent = menuCsvPath.toAbsolutePath().normalize().getParent();
+            if (menuParent != null) {
+                return menuParent.resolve("report.txt");
+            }
+        }
+        return Paths.get(DEFAULT_REPORT_PATH);
     }
 
     public static void generateAndWriteReport(
