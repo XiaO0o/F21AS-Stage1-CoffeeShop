@@ -1,0 +1,163 @@
+@startuml
+title Coffee Shop Simulation Stage 1 - Class Diagram
+
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+
+package "coffeeshop.model" {
+  enum Category {
+    DRINK
+    FOOD
+    SNACK
+    +fromPrefix(prefix: String): Category
+  }
+
+  class InvalidMenuItemDataException {
+    +InvalidMenuItemDataException(message: String)
+    +InvalidMenuItemDataException(message: String, cause: Throwable)
+  }
+
+  class MenuItem {
+    -id: String
+    -name: String
+    -price: double
+    -category: Category
+    +MenuItem(id: String, name: String, price: double, category: Category)
+    +getPrice(): double
+    +getId(): String
+    +getName(): String
+    +getCategory(): Category
+    +equals(other: Object): boolean
+    +hashCode(): int
+    +toString(): String
+  }
+
+  class Menu {
+    -itemsMap: Map<String, MenuItem>
+    +findById(id: String): MenuItem
+    +listByCategory(cat: Category): List<MenuItem>
+    +addItem(item: MenuItem): void
+  }
+
+  class OrderLine {
+    -item: MenuItem
+    -quantity: int
+    -hasOwnCup: boolean
+    +OrderLine(item: MenuItem, quantity: int, hasOwnCup: boolean)
+    +getSubtotal(): double
+    ~getItem(): MenuItem
+    ~getQuantity(): int
+    ~isOwnCupDrinkLine(): boolean
+  }
+
+  class Order {
+    -orderId: String
+    -lines: List<OrderLine>
+    -dateTime: LocalDateTime
+    +Order(orderId: String, dateTime: LocalDateTime)
+    +addLine(item: MenuItem, qty: int, hasCup: boolean): void
+    +getSubtotal(): double
+    +applyRuleA(): double
+    +applyRuleB(): double
+    +getTotal(): double
+    -countEligibleDrinkUnitsForRuleA(): int
+    ~getLinesView(): List<OrderLine>
+    ~getDateTime(): LocalDateTime
+  }
+
+  class OrderStatistics {
+    -countMap: Map<MenuItem, Integer>
+    +recordOrder(order: Order): void
+    +getCount(item: MenuItem): int
+    ~getCountMapView(): Map<MenuItem, Integer>
+  }
+
+  class ReportGenerator {
+    +generateItemReport(statistics: OrderStatistics): String
+    +generateSalesReport(orders: List<Order>): String
+  }
+}
+
+package "coffeeshop.io" {
+  class CsvFileReader {
+    +readAllLines(path: Path): List<String>
+  }
+
+  class CsvLoader {
+    +loadMenu(menuCsvPath: Path): Menu
+    +loadOrders(ordersCsvPath: Path, menu: Menu): TreeMap<LocalDateTime, Order>
+    -buildGroupKey(timestamp: LocalDateTime, customerId: String): String
+    -resolveUniqueTimestamp(orders: TreeMap<LocalDateTime, Order>, timestamp: LocalDateTime): LocalDateTime
+    -parseBooleanStrict(value: String): boolean
+    -isMenuHeader(line: String): boolean
+    -isOrdersHeader(line: String): boolean
+  }
+}
+
+package "coffeeshop.app" {
+  class CoffeeShopApp {
+    -DEFAULT_MENU_PATH: String
+    -DEFAULT_ORDERS_PATH: String
+    +DEFAULT_REPORT_PATH: String
+    +main(args: String[]): void
+    +generateAndWriteReport(allOrders: TreeMap<LocalDateTime, Order>, stats: OrderStatistics, reportPath: Path): void
+    -resolveMenuCsvPath(args: String[]): Path
+    -resolveOrdersCsvPath(args: String[]): Path
+    -writeReport(reportPath: Path, reportContent: String): void
+  }
+}
+
+package "coffeeshop.ui" {
+  class CoffeeShopFrame {
+    -allOrders: TreeMap<LocalDateTime, Order>
+    -stats: OrderStatistics
+    -currentOrder: Order
+    -currentCustomerId: String
+    +CoffeeShopFrame(menu: Menu, allOrders: TreeMap<LocalDateTime, Order>, stats: OrderStatistics)
+    -createNewOrder(): void
+    -addSelectedItems(): void
+    -refreshCartTable(): void
+    -refreshBillDetails(): void
+    -buildBillText(order: Order): String
+    -completeOrder(): void
+    -exitAndGenerateReport(): void
+    -updateOwnCupControlBySelection(): void
+    -resolveUniqueOrderKey(candidate: LocalDateTime): LocalDateTime
+  }
+}
+
+Exception <|-- InvalidMenuItemDataException
+
+MenuItem --> Category : category
+Menu *-- "0..*" MenuItem : itemsMap
+
+Order *-- "0..*" OrderLine : lines
+OrderLine --> MenuItem : item
+
+OrderStatistics --> Order : recordOrder()
+OrderStatistics --> MenuItem : countMap/getCount()
+
+ReportGenerator --> OrderStatistics
+ReportGenerator --> Order
+
+CsvLoader ..> CsvFileReader
+CsvLoader ..> Menu
+CsvLoader ..> MenuItem
+CsvLoader ..> Category
+CsvLoader ..> Order
+
+CoffeeShopApp ..> CsvLoader
+CoffeeShopApp ..> Menu
+CoffeeShopApp ..> Order
+CoffeeShopApp ..> OrderStatistics
+CoffeeShopApp ..> ReportGenerator
+CoffeeShopApp ..> CoffeeShopFrame
+
+CoffeeShopFrame ..> CoffeeShopApp
+CoffeeShopFrame ..> Menu
+CoffeeShopFrame ..> MenuItem
+CoffeeShopFrame ..> Category
+CoffeeShopFrame ..> Order
+CoffeeShopFrame ..> OrderStatistics
+
+@enduml

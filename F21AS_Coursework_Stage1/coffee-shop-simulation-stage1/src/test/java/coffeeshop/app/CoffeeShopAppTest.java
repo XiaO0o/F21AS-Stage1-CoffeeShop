@@ -52,10 +52,12 @@ class CoffeeShopAppTest {
         }
 
         String output = capturedOutput.toString(StandardCharsets.UTF_8);
+        Path expectedReportPath =
+                tempMenuCsv.toAbsolutePath().normalize().getParent().resolve("report.txt");
         assertTrue(output.contains("CoffeeShopApp started"));
         assertTrue(output.contains("Loaded menu item count: 3"));
         assertTrue(output.contains("Loaded order count: 1"));
         assertTrue(output.contains("Total sales: 3.20"));
-        assertTrue(output.contains("Report written to: data/report.txt"));
+        assertTrue(output.contains("Report written to: " + expectedReportPath.toString()));
     }
 }

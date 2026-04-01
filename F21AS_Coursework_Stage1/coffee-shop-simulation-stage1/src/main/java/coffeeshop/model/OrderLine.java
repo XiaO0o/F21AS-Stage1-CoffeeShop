@@ -23,12 +23,16 @@ public class OrderLine {
         return item.getPrice() * quantity;
     }
 
-    MenuItem getItem() {
+    public MenuItem getItem() {
         return item;
     }
 
-    int getQuantity() {
+    public int getQuantity() {
         return quantity;
+    }
+
+    public boolean hasOwnCup() {
+        return hasOwnCup;
     }
 
     boolean isOwnCupDrinkLine() {

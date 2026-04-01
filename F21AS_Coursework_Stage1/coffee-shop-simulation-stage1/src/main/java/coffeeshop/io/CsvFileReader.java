@@ -15,4 +15,8 @@ public final class CsvFileReader {
         Objects.requireNonNull(path, "path must not be null");
         return Files.readAllLines(path);
     }
+
+    public static List<String> readAllLines(String source) throws IOException {
+        return InputResourceHelper.readAllLines(source);
+    }
 }
