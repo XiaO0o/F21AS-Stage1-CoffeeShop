@@ -1,77 +1,112 @@
-# F21AS-Coursework
-# Coffee Shop Simulation Stage 1
+# Coffee Shop Simulation
 
-Java 17+ Maven project for Coffee Shop Simulation Stage 1.
+Java 17 + Maven coursework project covering:
 
-## Prerequisites
+- `Stage 1`: menu, order, discount, CSV loading, report generation, basic GUI
+- `Stage 2`: multithreaded coffee shop simulation with Swing GUI, MVC, Observer, Strategy, graceful shutdown, and executable jars
 
-- JDK 17+
-- Maven 3.9+
+## Build
 
-## Data files
-
-- Default menu file: `data/menu.csv`
-- Default orders file: `data/orders.csv`
-- Both files include valid rows and intentionally invalid rows.
-- Invalid rows are skipped and logged to `System.err`.
-
-## Run tests
+Run tests:
 
 ```bash
 mvn test
 ```
 
-## Run application
+Package executable jars:
 
-For a new device (or after cleaning `target/`), run compile first:
+```bash
+mvn clean package
+```
+
+Generated jars:
+
+- `target/coffee-shop-simulation-stage1-1.0-SNAPSHOT-stage1.jar`
+- `target/coffee-shop-simulation-stage1-1.0-SNAPSHOT-stage2.jar`
+
+For Windows users, these are also the executable jar files you can open directly by double-clicking:
+
+- `target/coffee-shop-simulation-stage1-1.0-SNAPSHOT-stage1.jar` (Stage 1)
+- `target/coffee-shop-simulation-stage1-1.0-SNAPSHOT-stage2.jar` (Stage 2)
+
+## Run Stage 1
+
+Stage 1 executable jar:
+
+```bash
+java -jar target/coffee-shop-simulation-stage1-1.0-SNAPSHOT-stage1.jar
+```
+
+## Run Stage 2
+
+Stage 2 GUI jar:
+
+```bash
+java -jar target/coffee-shop-simulation-stage1-1.0-SNAPSHOT-stage2.jar
+```
+
+You can also run Stage 2 from Maven:
 
 ```bash
 mvn -DskipTests compile exec:java
 ```
 
-Compiled runnable JAR location: `target/coffee-shop-simulation-stage1-1.0-SNAPSHOT.jar`.
+## Stage 2 Default Behaviour
 
-The app reads `data/menu.csv` and `data/orders.csv` by default.
-Path resolution behavior:
-- First try current working directory.
-- If not found, fallback to the application/JAR location.
+By default, Stage 2 loads bundled classpath resources:
 
-You can also run the packaged JAR directly:
+- `src/main/resources/data/menu.csv`
+- `src/main/resources/data/orders.csv`
 
-```bash
-mvn -DskipTests package
-java -jar target/coffee-shop-simulation-stage1-1.0-SNAPSHOT.jar
-```
+The GUI starts with:
 
-Example startup output:
+- menu source: `classpath:data/menu.csv`
+- orders source: `classpath:data/orders.csv`
+- initial staff count: `2`
+- order arrival delay: `300 ms`
+- speed: `1x`
+
+## Stage 2 Custom Inputs
+
+In the GUI, you can change:
+
+- menu CSV source
+- orders CSV source
+- initial staff count
+- order arrival delay
+- speed mode
+
+Stage 2 also supports headless/CLI execution. Arguments are:
 
 ```text
-CoffeeShopApp started
-Loaded menu item count: 8
-Loaded order count: 4
-Total sales: 43.14
+menuSource ordersSource staffCount producerDelayMs logPath reportPath speedMode
 ```
 
-## GUI workflow
-
-1. Enter `Customer ID` and click `New Order`.
-2. Select one or more items from the left list.
-3. Set `Quantity` and click `Add Selected Items`.
-4. `Bill Details` updates automatically after each add (line subtotals, subtotal, RuleA, RuleB, total).
-5. `Has Own Cup` is only available for `DRINK` items. When `FOOD` or `SNACK` is selected, it is disabled.
-6. Click `Complete Order` to save the order and update statistics.
-7. Click `Exit` to write `data/report.txt` and close the app.
-
-## Report output
-
-- Generated file: `data/report.txt` (same directory as the resolved menu CSV)
-- Contains:
-  - item list and item counts
-  - best-selling ranking
-  - total order count and total sales
-
-## Run with custom CSV paths
+Example:
 
 ```bash
-mvn -DskipTests compile exec:java -Dexec.args="data/menu.csv data/orders.csv"
+java "-Djava.awt.headless=true" -jar target/coffee-shop-simulation-stage1-1.0-SNAPSHOT-stage2.jar classpath:data/menu.csv classpath:data/orders.csv 2 300 data/simulation.log data/report.txt 1x
 ```
+
+Accepted speed values:
+
+- `0.5x`
+- `1x`
+- `2x`
+- `4x`
+
+## Stage 2 Output Files
+
+When the simulation finishes, it writes:
+
+- `data/simulation.log`
+- `data/report.txt`
+
+The program creates the output directory automatically if needed.
+
+## Notes
+
+- Closing the Stage 2 window triggers graceful shutdown rather than immediate forced stop.
+- `online` orders are prioritised over regular waiting-queue orders.
+- If you want a longer simulation, edit `src/main/resources/data/orders.csv` and rebuild the jar.
+- Development summary for Stage 2 is in `docs/stage2-development-notes.md`.
